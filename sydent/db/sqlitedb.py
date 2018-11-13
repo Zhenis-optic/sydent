@@ -99,7 +99,7 @@ class SqliteDatabase:
             cur.execute("DROP INDEX IF EXISTS global_threepid_originServer_originId")
             cur.execute("DROP INDEX IF EXISTS medium_lower_address")
             cur.execute("DROP INDEX IF EXISTS threepid_originServer_originId")
-            cur.execute("ALTER TABLE global_threepid_associations RENAME TO old_global_threepid_associations");
+            #cur.execute("ALTER TABLE global_threepid_associations RENAME TO old_global_threepid_associations");
             cur.execute(
                 "CREATE TABLE IF NOT EXISTS global_threepid_associations "
                 "(id integer primary key autoincrement, "
@@ -113,12 +113,12 @@ class SqliteDatabase:
                 "originId integer not null, "
                 "sgAssoc text not null)"
             )
-            cur.execute(
-                "INSERT INTO global_threepid_associations "
-                "(medium, address, mxid, ts, notBefore, notAfter, originServer, originId, sgAssoc) "
-                "SELECT medium, address, mxid, ts, notBefore, notAfter, originServer, originId, sgAssoc "
-                "FROM old_global_threepid_associations"
-            )
+            #cur.execute(
+            #    "INSERT INTO global_threepid_associations "
+            ##    "(medium, address, mxid, ts, notBefore, notAfter, originServer, originId, sgAssoc) "
+             #   "SELECT medium, address, mxid, ts, notBefore, notAfter, originServer, originId, sgAssoc "
+             #   "FROM old_global_threepid_associations"
+            #)
             cur.execute("CREATE INDEX global_threepid_medium_address on global_threepid_associations (medium, address)")
             cur.execute(
                 "CREATE INDEX global_threepid_medium_lower_address on "
@@ -128,7 +128,7 @@ class SqliteDatabase:
                 "CREATE UNIQUE INDEX global_threepid_originServer_originId on "
                 "global_threepid_associations (originServer, originId)"
             )
-            cur.execute("DROP TABLE old_global_threepid_associations")
+            #cur.execute("DROP TABLE old_global_threepid_associations")
             self.db.commit()
             logger.info("v0 -> v1 schema migration complete")
             self._setSchemaVersion(1)
