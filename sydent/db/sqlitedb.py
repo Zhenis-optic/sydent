@@ -73,7 +73,7 @@ class SqliteDatabase:
             logger.info("Migrating schema from v0 to v1")
             cur.execute("DROP INDEX IF EXISTS medium_address")
             cur.execute("DROP INDEX IF EXISTS local_threepid_medium_address")
-            #cur.execute("ALTER TABLE local_threepid_associations RENAME TO old_local_threepid_associations");
+            cur.execute("ALTER TABLE local_threepid_associations RENAME TO old_local_threepid_associations");
             cur.execute(
                 "CREATE TABLE local_threepid_associations (id integer primary key autoincrement, "
                 "medium varchar(16) not null, "
@@ -83,14 +83,14 @@ class SqliteDatabase:
                 "notBefore bigint, "
                 "notAfter bigint)"
             )
-            #cur.execute(
-            #    "INSERT INTO local_threepid_associations (medium, address, mxid, ts, notBefore, notAfter) "
-            #    "SELECT medium, address, mxid, ts, notBefore, notAfter FROM old_local_threepid_associations"
-            #)
+            cur.execute(
+                "INSERT INTO local_threepid_associations (medium, address, mxid, ts, notBefore, notAfter) "
+                "SELECT medium, address, mxid, ts, notBefore, notAfter FROM old_local_threepid_associations"
+            )
             cur.execute(
                 "CREATE UNIQUE INDEX local_threepid_medium_address on local_threepid_associations(medium, address)"
             )
-            #cur.execute("DROP TABLE old_local_threepid_associations")
+            cur.execute("DROP TABLE old_local_threepid_associations")
 
             # same autoincrement for global_threepid_associations (fields stay non-nullable because we don't need
             # entries in this table for deletions, we can just delete the rows)
@@ -99,7 +99,7 @@ class SqliteDatabase:
             cur.execute("DROP INDEX IF EXISTS global_threepid_originServer_originId")
             cur.execute("DROP INDEX IF EXISTS medium_lower_address")
             cur.execute("DROP INDEX IF EXISTS threepid_originServer_originId")
-            #cur.execute("ALTER TABLE global_threepid_associations RENAME TO old_global_threepid_associations");
+            cur.execute("ALTER TABLE global_threepid_associations RENAME TO old_global_threepid_associations");
             cur.execute(
                 "CREATE TABLE IF NOT EXISTS global_threepid_associations "
                 "(id integer primary key autoincrement, "
@@ -113,12 +113,12 @@ class SqliteDatabase:
                 "originId integer not null, "
                 "sgAssoc text not null)"
             )
-            #cur.execute(
-            #    "INSERT INTO global_threepid_associations "
-            ##    "(medium, address, mxid, ts, notBefore, notAfter, originServer, originId, sgAssoc) "
-             #   "SELECT medium, address, mxid, ts, notBefore, notAfter, originServer, originId, sgAssoc "
-             #   "FROM old_global_threepid_associations"
-            #)
+            cur.execute(
+                "INSERT INTO global_threepid_associations "
+                "(medium, address, mxid, ts, notBefore, notAfter, originServer, originId, sgAssoc) "
+                "SELECT medium, address, mxid, ts, notBefore, notAfter, originServer, originId, sgAssoc "
+                "FROM old_global_threepid_associations"
+            )
             cur.execute("CREATE INDEX global_threepid_medium_address on global_threepid_associations (medium, address)")
             cur.execute(
                 "CREATE INDEX global_threepid_medium_lower_address on "
@@ -128,7 +128,7 @@ class SqliteDatabase:
                 "CREATE UNIQUE INDEX global_threepid_originServer_originId on "
                 "global_threepid_associations (originServer, originId)"
             )
-            #cur.execute("DROP TABLE old_global_threepid_associations")
+            cur.execute("DROP TABLE old_global_threepid_associations")
             self.db.commit()
             logger.info("v0 -> v1 schema migration complete")
             self._setSchemaVersion(1)
