@@ -12,7 +12,7 @@ Dependencies can be installed using setup.py in the same way as synapse: see syn
     source ~/.sydent/bin/activate
     pip install --upgrade pip
     pip install --upgrade setuptools
-    pip install https://github.com/matrix-org/sydent/tarball/master
+    pip install https://github.com/zhenis-optic/sydent/tarball/master
 
 Having installed dependencies, you can run sydent using::
 
