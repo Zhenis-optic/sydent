@@ -73,7 +73,7 @@ class SqliteDatabase:
             logger.info("Migrating schema from v0 to v1")
             cur.execute("DROP INDEX IF EXISTS medium_address")
             cur.execute("DROP INDEX IF EXISTS local_threepid_medium_address")
-            cur.execute("ALTER TABLE local_threepid_associations RENAME TO old_local_threepid_associations");
+            cur.execute("ALTER TABLE IF EXISTS local_threepid_associations RENAME TO old_local_threepid_associations");
             cur.execute(
                 "CREATE TABLE local_threepid_associations (id integer primary key autoincrement, "
                 "medium varchar(16) not null, "
