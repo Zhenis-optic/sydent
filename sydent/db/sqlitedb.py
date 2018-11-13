@@ -83,14 +83,14 @@ class SqliteDatabase:
                 "notBefore bigint, "
                 "notAfter bigint)"
             )
-            cur.execute(
-                "INSERT INTO local_threepid_associations (medium, address, mxid, ts, notBefore, notAfter) "
-                "SELECT medium, address, mxid, ts, notBefore, notAfter FROM old_local_threepid_associations"
-            )
+            #cur.execute(
+            #    "INSERT INTO local_threepid_associations (medium, address, mxid, ts, notBefore, notAfter) "
+            #    "SELECT medium, address, mxid, ts, notBefore, notAfter FROM old_local_threepid_associations"
+            #)
             cur.execute(
                 "CREATE UNIQUE INDEX local_threepid_medium_address on local_threepid_associations(medium, address)"
             )
-            cur.execute("DROP TABLE old_local_threepid_associations")
+            #cur.execute("DROP TABLE old_local_threepid_associations")
 
             # same autoincrement for global_threepid_associations (fields stay non-nullable because we don't need
             # entries in this table for deletions, we can just delete the rows)
